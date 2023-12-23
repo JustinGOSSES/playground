@@ -70,8 +70,8 @@
 				If you try anywhere else, it won't work! (HINT: You have to allow location sharing in the browser for this to work.)
 				</p>
 				<span>
-					<p>You are currently this many meters from the shown house:</p>
-					<p id="distanceP"></p>
+					<p>According to your browser, you are currently this many meters from the shown house:</p>
+					<p id="distanceP">"geolocation not allowed in browser"</p>
 					<p id="distanceMessage">
 					</p>
 				</span>
@@ -173,7 +173,7 @@
 			var distance = R * c; // in meters
 
 		var distanceP = document.getElementById("distanceP");
-		distanceP.textContent += Math.round(distance);
+		distanceP.textContent = Math.round(distance);
 		if (distance <= 1000) {
 			console.log("User is near enough to the target location.");
 			var distanceMessage = document.getElementById("distanceMessage");
