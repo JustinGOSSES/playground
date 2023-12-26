@@ -18,6 +18,7 @@
 <body>
 	
 	<script>
+		/// Used to get viewport size of device
 		window.onload = showViewport;
 		window.onresize = showViewport;
 		function showViewport() {
@@ -51,10 +52,12 @@
 
 		<div id="----------------------"></div>
 		<div id="----------------------"></div>
+		<!-- //// The lines above have nothing in the div elements, so they aren't visible on the web page -->
 		<div id="label" class="largeScreen" style="position:absolute;z-index:2;background-color:#99b89b;top:0px;left:0px;padding:20px;width:100%">
 			<div id="text" style="margin-left:auto;margin-right:auto;margin-bottom:20px;width:100%">
 				<h1>Happy Holidays</h1>
 			</div>
+			<!-- THE PHP HERE RETURNS INFORMATION FROM THE FORM AND GIVES IT TO THE JAVASCRIPT -->
 			<div id="egggif" style="margin-left:40px;margin-top:100px;background-color:white;padding-top:6px;padding-bottom:6px;padding-left:6px;padding-right:6px;min-width:200px;">
 				<p>What is the name of the country Uncle Justin is in right now?</p></a></p>
 				<form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
@@ -63,9 +66,11 @@
 				</form>
 			</div>
 		</div>
+		<!-- This DIV holds the streetview image of the house seen in background -->
 		<div id="output" style="position:absolute;left:-5px;top:-5px;z-index:1">
 		        <iframe id="streetview" src="https://www.google.com/maps/embed?pb=!4v1565929299558!6m8!1m7!1sCAoSLEFGMVFpcE1ZendfLWlraUNSRHVKMHhybWRUYXVEZnkxQnFsT2cxWWJzY1FB!2m2!1d29.5537783!2d-95.094475!3f171.00317270618567!4f18.6065479575514!5f0.7820865974627469" width="1500" height="1000px" frameborder="0" style="border:0" allowfullscreen></iframe>
 		</div>
+		<!-- THIS DIV HOLDS THE INSTRUCTIONS FOR THE GAME -->
 		<div style="position:absolute;z-index:2;background-color:#9db899;bottom:10px;right:0px;padding:20px;width:15em">
 			<h2>To get to this Christmas present, you must solve 4 challenges.</h2>
 			<div id="firstChallengeBlock">
@@ -89,12 +94,15 @@
 	</div>
 	
 	<script>
+		//// THis is the main javascript logic now
+		/// d and date_string were used to get the current date, but ended up not using it
 		var d = new Date()
 		var date_string = d.toString()
 		function findImage(date_string,image_src,text){
             var image_src = "https://www.google.com/maps/embed?pb=!4v1703333216130!6m8!1m7!1s93s5KrwF2DAv1_H58nbz4A!2m2!1d41.46403415688044!2d-81.46328384943538!3f94.13616353637842!4f-4.562979730490426!5f0.7820865974627469"
-			/// TAIPEI
+			/// TAIPEI, image which was used for testing it the geolocation worked while in Taipei
 			//var image_src ="https://www.google.com/maps/embed?pb=!4v1703333843686!6m8!1m7!1s5gGXrhc3ZbcgxcDySyEFsg!2m2!1d25.03687000969017!2d121.5360625664936!3f180.56459263069354!4f-15.497688655131697!5f0.7820865974627469"
+			// THIS NEXT FEW LINES ARE NOT BEING USED
 			var text = "Still on vacation. Wandering around somewhat close to here today. This will update every day!"
 			if(date_string.includes("Aug 31")){image_src = "https://www.google.com/maps/embed?pb=!4v1565927462677!6m8!1m7!1sdTZ0qlIqxBm5Vr4FLJ51Wg!2m2!1d45.4417277473901!2d12.32528369540017!3f186.1344529005574!4f-18.89424737527132!5f0.7820865974627469"}
 			else if(date_string.includes("Sep 1")){
@@ -128,8 +136,10 @@
 		}
 	</script>
 	<script>
+	//// This calls the easter egg helper library
 	var egg = new Egg();
 	egg
+	  ////// This uses the easter egg helper library to listen for the konami code
 	  .addCode("up,up,down,down,left,right,left,right,b,a", function() {
 	    jQuery('#egggif').fadeIn(500, function() {
 	      window.setTimeout(function() { jQuery('#egggif').hide(); }, 500000);
@@ -141,6 +151,7 @@
 	  }).listen();
 	</script>
 	<script>
+	//// THIS ONLY TREATS THE FORM INPUT AS VALID IF IT MEETS THE GIVEN ALLOWED VALUES
 	function validateForm() {
 	  var x = document.forms["myForm"]["fname"].value;
 	  if (x == "Taiwan" || x == "taiwan") {
@@ -152,11 +163,13 @@
 		  return false;
 	  }
 	}
+	//// THIS IS THE GEOLOCATION LOGIC, if the user allows it, it will get the user's location and compare it to the target location
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var userLat = position.coords.latitude;
 			var userLon = position.coords.longitude;
 			console.log("User's latitude is " + userLat + " and longitude is " + userLon + ".");
+			///// THE LINES WITh // ARE IGNORED
 			// J & AJ location
 			//var targetLat = 41.4737499;
 			//var targetLon = -81.5106859;
@@ -167,6 +180,8 @@
 			//var targetLat = 25.03687;
 			//var targetLon = 121.5360626;
 
+			// THE NEXT FEW LINES FIND DISTANCE IN METERS
+			// BETWEEN BROWSWER SUPPLIED LOCATION AND TARGET LOCATION
 			var R = 6371e3; // Earth's radius in meters
 			var φ1 = userLat * Math.PI/180; // φ, λ in radians
 			var φ2 = targetLat * Math.PI/180;
@@ -179,9 +194,10 @@
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
 			var distance = R * c; // in meters
-
+		//// NEXT FEW LINES PUt THAT DISTANCE ON THE PAGE
 		var distanceP = document.getElementById("distanceP");
 		distanceP.textContent = Math.round(distance);
+		//// AND DO MORE LOGIC ONLY IF DISTANCE MEETS A THRESHOLD
 		if (distance <= 1000) {
 			console.log("User is near enough to the target location.");
 			var distanceMessage = document.getElementById("distanceMessage");
@@ -189,6 +205,7 @@
 			// Create a <button> element
 			var btn = document.createElement("button");
 			btn.innerHTML = "Show Next Challenge";
+			// ON CLICK, CHANGE WHAT IS SHOWN ON PAGE
 			btn.onclick = function() {
 				var konomiChallenge = document.getElementById("konomiChallenge");
 				konomiChallenge.style.display = "block";
@@ -197,8 +214,8 @@
 			};
 			var buttonFor2ndStep = document.getElementById("buttonFor2ndStep");
 			buttonFor2ndStep.appendChild(btn);
+		//// IF DISTANCE IS TOO FAR, SHOW A MESSAGE
 		} else {
-			// console.log("You are more than 10 meters away from the target location.");
 			var distanceMessage = document.getElementById("distanceMessage");
 			distanceMessage.textContent = "You are too far away from the target location, so you can not go to the next step!.";
 		}
